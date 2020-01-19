@@ -96,6 +96,8 @@
 <style></style>
 
 <script>
+/* global Highcharts */
+
 import axios from "axios";
 
 export default {
@@ -106,33 +108,34 @@ export default {
       habitJustCompleted: false
     };
   },
-  created: function() {
+  created: function() {},
+  mounted: function() {
     axios.get("/api/habits").then(response => {
       this.habits = response.data;
-    });
-  },
-  mounted: function() {
-    var myChart = Highcharts.chart("container", {
-      chart: {
-        type: "bar"
-      },
-      title: {
-        text: "Longest Completion Streaks"
-      },
-      xAxis: {
-        categories: [this.habitStreak[0], "data", "description"]
-      },
-      yAxis: {
+      console.log("completedHabits", this.completedHabits);
+
+      var myChart = Highcharts.chart("container", {
+        chart: {
+          type: "bar"
+        },
         title: {
-          text: "Day streak"
-        }
-      },
-      series: [
-        {
-          name: "",
-          data: [1, 0, 4]
-        }
-      ]
+          text: "Longest Completion Streaks"
+        },
+        xAxis: {
+          categories: this.habitStreak.map(habit => habit.description)
+        },
+        yAxis: {
+          title: {
+            text: "Day streak"
+          }
+        },
+        series: [
+          {
+            name: "",
+            data: this.habitStreak.map(habit => habit.completion_number)
+          }
+        ]
+      });
     });
   },
   methods: {
