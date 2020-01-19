@@ -1,32 +1,41 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <header id="header">
+      <h1>Diddit!</h1>
+      <nav class="links">
+        <ul>
+          <li><router-link to="/">Home</router-link></li>
+          <li v-if="jwt"><router-link to="/habits">Habits</router-link></li>
+          <li v-if="jwt"><router-link to="/tasks">Tasks</router-link></li>
+          <li v-if="!jwt"><router-link to="/signup">Signup</router-link></li>
+          <li v-if="!jwt"><router-link to="/login">Login</router-link></li>
+          <li v-if="jwt"><router-link to="/logout">Logout</router-link></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="wrapper style1 align-center">
+      <div class="content"><router-view v-on:theJwtChanged="updateJwt()" /></div>
+    </section>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<style></style>
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+export default {
+  data: function() {
+    return {
+      jwt: null
+    };
+  },
+  created: function() {
+    this.jwt = localStorage.jwt;
+  },
+  methods: {
+    updateJwt: function() {
+      this.jwt = localStorage.jwt;
+    }
+  }
+};
+</script>
