@@ -6,6 +6,7 @@ import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import HabitsIndex from "../views/HabitsIndex.vue";
 import TasksIndex from "../views/TasksIndex.vue";
+import Cal from "../views/Cal.vue";
 
 Vue.use(VueRouter);
 
@@ -27,7 +28,8 @@ const routes = [
   { path: "/login", name: "login", component: Login },
   { path: "/logout", name: "logout", component: Logout },
   { path: "/habits", name: "habits-index", component: HabitsIndex },
-  { path: "/tasks", name: "tasks-index", component: TasksIndex }
+  { path: "/tasks", name: "tasks-index", component: TasksIndex },
+  { path: "/calendar", name: "caldendar", component: Cal }
 ];
 
 const router = new VueRouter({

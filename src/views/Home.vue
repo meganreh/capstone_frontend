@@ -17,7 +17,6 @@
               v-on:click="changeAllStatus(habits)"
             />
           </li>
-          <!-- <li><a href="#first" class="button primary big wide smooth-scroll-middle">✓</a></li> -->
         </ul>
       </div>
       <div class="image">

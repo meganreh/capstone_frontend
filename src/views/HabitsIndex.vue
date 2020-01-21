@@ -162,6 +162,12 @@ export default {
         this.habit = {};
       });
     },
+    destroyHabit: function(habit) {
+      axios.delete("/api/habits/" + habit.id).then(response => {
+        var index = this.habits.indexOf(habit);
+        this.habits.splice(index, 1);
+      });
+    },
     changeStatus: function(habit) {
       var params = {
         completed: true,

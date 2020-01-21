@@ -47,7 +47,7 @@
     </section>
 
     <section class="wrapper style1 align-center">
-      <div class="inner medium">
+      <div height="250" class="inner medium">
         <h4>new task</h4>
         <form v-on:submit.prevent="createTask()">
           <div class="fields">
@@ -69,6 +69,21 @@
         </form>
       </div>
     </section>
+    <div id="app">
+      <vue-cal class="vuecal--blue-theme" :events="events" :time-from="10 * 60" :dbl-click-to-navigate="false">
+        <template v-slot:cell-content="{ cell, view, goNarrower, events }">
+          <div class="vuecal__cell-date" :class="view.id" @click="goNarrower">
+            <span class="clickable">{{ cell.content }}</span>
+          </div>
+          <span class="vuecal__cell-events-count" v-if="view.id === 'month' &amp;&amp; events.length">
+            {{ events.length }}
+          </span>
+          <span class="vuecal__no-event" v-if="['week', 'day'].includes(view.id) &amp;&amp; !events.length">
+            Nothing here 👌
+          </span>
+        </template>
+      </vue-cal>
+    </div>
   </div>
 </template>
 
@@ -78,8 +93,12 @@
 import axios from "axios";
 import VueMoment from "vue-moment";
 import moment from "moment";
+import Vue from "vue";
+import VueCal from "vue-cal";
+import "vue-cal/dist/vuecal.css";
 
 export default {
+  components: { VueCal },
   data: function() {
     return {
       tasks: [],
@@ -140,6 +159,10 @@ export default {
       return `http://www.google.com/calendar/event?action=TEMPLATE&dates=${gcalStartTime}/${gcalEndTime}&text=${task.description}&location=&details=`;
     }
   },
-  computed: {}
+  filters: {
+    moment: function(date) {
+      return moment(date).format("MMMM Do YYYY, h:mm:ss a");
+    }
+  }
 };
 </script>
