@@ -1,6 +1,23 @@
 <template>
   <div>
     <section
+      style="padding-top: 0px; padding-bottom: 0px"
+      v-if="habits.length === 0"
+      class="banner style2 orient-center content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
+    >
+      <div class="content">
+        <br />
+        <span>
+          <h4>Let's get started!</h4>
+          <br />
+          Add a habit you'd like to complete daily below!
+          <br />
+          For example: "Brush teeth" or "take medication."
+        </span>
+      </div>
+    </section>
+    <section
+      v-else-if="habits.length && incompleteHabits.length > 0"
       class="spotlight style2 orient-right content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
     >
       <div class="content">
@@ -40,6 +57,17 @@
         <img v-else src="images/habits.png" alt="" />
       </div>
     </section>
+    <section
+      style="padding-top: 0px; padding-bottom: 0px"
+      v-else
+      class="banner style2 orient-center content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
+    >
+      <div class="content">
+        <h4>You legend!</h4>
+        <br />
+        <span style="font-size: 1.25em;">Your daily habits are completed. We have no choice but to stan.</span>
+      </div>
+    </section>
 
     <section
       v-if="completedHabits.length > 0"
@@ -62,8 +90,8 @@
     </section>
 
     <div class="items style3 big">
-      <section class="wrapper style1 align-center">
-        <div class="inner medium">
+      <section class="wrapper align-center">
+        <div>
           <h4>new habit</h4>
           <form>
             <div class="fields">
@@ -87,13 +115,21 @@
           </form>
         </div>
       </section>
-      <div id="container" style="width: 40%; height: 400px;"></div>
-      <section></section>
+
+      <section class="wrapper align-center">
+        <div id="container" style="width: 100%; height: 400px;"></div>
+      </section>
     </div>
   </div>
 </template>
 
-<style></style>
+<style>
+@import "https://code.highcharts.com/css/highcharts.css";
+.highcharts-color-0 {
+  fill: #e55947;
+  stroke: #e55947;
+}
+</style>
 
 <script>
 /* global Highcharts */
@@ -116,22 +152,23 @@ export default {
 
       var myChart = Highcharts.chart("container", {
         chart: {
+          styledMode: true,
           type: "bar"
         },
         title: {
-          text: "Longest Completion Streaks"
+          text: "Days completed in a row"
         },
         xAxis: {
           categories: this.habitStreak.map(habit => habit.description)
         },
         yAxis: {
           title: {
-            text: "Day streak"
+            text: "Days"
           }
         },
         series: [
           {
-            name: "",
+            name: "Completion streaks",
             data: this.habitStreak.map(habit => habit.completion_number)
           }
         ]
@@ -187,6 +224,9 @@ export default {
   computed: {
     completedHabits: function() {
       return this.habits.filter(habit => habit.completed);
+    },
+    incompleteHabits: function() {
+      return this.habits.filter(habit => !habit.completed);
     },
     habitStreak: function() {
       return this.habits.filter(habit => habit.completion_number >= 2);

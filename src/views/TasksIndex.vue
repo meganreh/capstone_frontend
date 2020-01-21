@@ -1,7 +1,7 @@
 <template>
   <div>
     <section v-if="tasks.length" class="spotlight style3 orient-center">
-      <div class="inner medium">
+      <div class="inner medium" style="width: 80%;">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -26,7 +26,7 @@
                 </td>
                 <td class="actions">
                   <input
-                    type="reset"
+                    type="button"
                     class="default small"
                     id="delete-task"
                     name="delete-tasks"
@@ -35,7 +35,12 @@
                   />
                 </td>
                 <td class="actions">
-                  <a class="button primary small" target="_blank" v-bind:href="googleCalendarLink(task)">
+                  <a
+                    style="margin-bottom: -15px;"
+                    class="button primary small"
+                    target="_blank"
+                    v-bind:href="googleCalendarLink(task)"
+                  >
                     add to calendar
                   </a>
                 </td>
@@ -70,7 +75,14 @@
       </div>
     </section>
     <div id="app">
-      <vue-cal class="vuecal--blue-theme" :events="events" :time-from="10 * 60" :dbl-click-to-navigate="false">
+      <vue-cal
+        style="height: 500px; width: 100%;"
+        class="vuecal--blue-theme"
+        :events="events"
+        :time="false"
+        :disable-views="['years']"
+        :dbl-click-to-navigate="false"
+      >
         <template v-slot:cell-content="{ cell, view, goNarrower, events }">
           <div class="vuecal__cell-date" :class="view.id" @click="goNarrower">
             <span class="clickable">{{ cell.content }}</span>
@@ -157,11 +169,6 @@ export default {
         .add(1, "days")
         .format("YYYYMMDD");
       return `http://www.google.com/calendar/event?action=TEMPLATE&dates=${gcalStartTime}/${gcalEndTime}&text=${task.description}&location=&details=`;
-    }
-  },
-  filters: {
-    moment: function(date) {
-      return moment(date).format("MMMM Do YYYY, h:mm:ss a");
     }
   }
 };
