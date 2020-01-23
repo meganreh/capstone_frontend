@@ -7,6 +7,7 @@
           <li><router-link to="/">Home</router-link></li>
           <li v-if="jwt"><router-link to="/habits">Habits</router-link></li>
           <li v-if="jwt"><router-link to="/tasks">Tasks</router-link></li>
+          <li v-if="jwt"><router-link to="/calendar">Calendar</router-link></li>
           <li v-if="!jwt"><router-link to="/signup">Signup</router-link></li>
           <li v-if="!jwt"><router-link to="/login">Login</router-link></li>
           <li v-if="jwt"><router-link to="/logout">Logout</router-link></li>

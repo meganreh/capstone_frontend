@@ -1,7 +1,7 @@
 <template>
   <div>
     <section
-      style="padding-top: 0px; padding-bottom: 0px"
+      style="padding-top: 0px; padding-bottom: 0px;"
       v-if="habits.length === 0"
       class="banner style2 orient-center content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
     >
@@ -17,6 +17,7 @@
       </div>
     </section>
     <section
+      style="padding-top: 20px; padding-bottom: 0px;"
       v-else-if="habits.length && incompleteHabits.length > 0"
       class="spotlight style2 orient-right content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
     >
@@ -58,7 +59,7 @@
       </div>
     </section>
     <section
-      style="padding-top: 0px; padding-bottom: 0px"
+      style="padding-top: 0px; padding-bottom: 0px;"
       v-else
       class="banner style2 orient-center content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
     >
@@ -70,6 +71,7 @@
     </section>
 
     <section
+      style="padding-top: 20px; padding-bottom: 20px;"
       v-if="completedHabits.length > 0"
       class="spotlight style2 orient-left content-align-center image-position-center onload-image-fade-in onload-content-fade-in"
     >
@@ -89,45 +91,39 @@
       </div>
     </section>
 
-    <div class="items style3 big">
-      <section class="wrapper align-center">
-        <div>
-          <h4>new habit</h4>
-          <form>
-            <div class="fields">
-              <div class="field">
-                <label for="habit">Description</label>
-                <input type="text" name="description" id="description" v-model="newHabitDescription" />
-              </div>
-              <ul class="actions special">
-                <li>
-                  <br />
-                  <input
-                    type="submit"
-                    id="create-habit"
-                    name="create-habit"
-                    value="Create"
-                    v-on:click="createHabit()"
-                  />
-                </li>
-              </ul>
+    <section class="banner style1 content-align-center onload-content-fade-in orient-left">
+      <div class="content">
+        <h4>new habit</h4>
+        <form>
+          <div class="fields">
+            <div class="field">
+              <label for="habit">Description</label>
+              <input type="text" name="description" id="description" v-model="newHabitDescription" />
             </div>
-          </form>
-        </div>
-      </section>
-
-      <section class="wrapper align-center">
-        <div id="container" style="width: 100%; height: 400px;"></div>
-      </section>
-    </div>
+            <ul class="actions special">
+              <li>
+                <br />
+                <input type="submit" id="create-habit" name="create-habit" value="Create" v-on:click="createHabit()" />
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+      <div
+        v-show="habitStreak.length > 0"
+        class="image"
+        id="container"
+        style="height: 400px; margin-right: 50px;"
+      ></div>
+    </section>
   </div>
 </template>
 
 <style>
 @import "https://code.highcharts.com/css/highcharts.css";
 .highcharts-color-0 {
-  fill: #e55947;
-  stroke: #e55947;
+  fill: #2c848f;
+  stroke: #2c848f;
 }
 </style>
 
@@ -141,16 +137,16 @@ export default {
     return {
       habits: [],
       newHabitDescription: "",
-      habitJustCompleted: false
+      habitJustCompleted: false,
+      myChart: null
     };
   },
   created: function() {},
   mounted: function() {
     axios.get("/api/habits").then(response => {
       this.habits = response.data;
-      console.log("completedHabits", this.completedHabits);
 
-      var myChart = Highcharts.chart("container", {
+      this.myChart = Highcharts.chart("container", {
         chart: {
           styledMode: true,
           type: "bar"
@@ -212,11 +208,13 @@ export default {
       };
       axios.patch("/api/habits/" + habit.id, params).then(response => {
         habit.completed = true;
-        habit.completion_number = habit.completion_number += 1;
+        // habit.completion_number = habit.completion_number;
         this.habitJustCompleted = true;
         setTimeout(() => {
           this.habitJustCompleted = false;
         }, 1000);
+        this.myChart.series[0].setData(this.habitStreak.map(habit => habit.completion_number));
+        this.myChart.xAxis[0].setCategories(this.habitStreak.map(habit => habit.description));
       });
     }
   },
