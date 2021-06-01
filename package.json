@@ -7,9 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "core-js": "^3.4.4",
-    "googleapis": "^39.2.0",
+    "googleapis": "^74.2.0",
     "luxon": "^1.21.3",
     "moment": "^2.24.0",
     "serialize-javascript": "^5.0.1",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-router": "^4.1.0",
-    "@vue/cli-service": "^4.1.0",
+    "@vue/cli-service": "^3.3.1",
     "vue-template-compiler": "^2.6.10"
   }
 }
